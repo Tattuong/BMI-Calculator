@@ -30,7 +30,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.bmicalculator.app"
+    namespace = "com.bmicalculator.bmicalculator"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -45,7 +45,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.bmicalculator.app"
+        applicationId = "com.bmicalculator.bmicalculator"
         minSdk = flutter.minSdkVersion
         targetSdk = 35
         versionCode = flutterVersionCode.toInteger()

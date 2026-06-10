@@ -39,8 +39,8 @@ flutter build ipa --release         # App Store (macOS)
 
 ## App ID
 
-- Android: `com.bmicalculator.app`
-- iOS: `com.bmicalculator.app`
+- Android: `com.bmicalculator.bmicalculator`
+- iOS: `com.bmicalculator.bmicalculator`
 
 ## Ghi chú
 

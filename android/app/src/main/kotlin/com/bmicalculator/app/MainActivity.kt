@@ -1,4 +1,4 @@
-package com.bmicalculator.app
+package com.bmicalculator.bmicalculator
 
 import io.flutter.embedding.android.FlutterActivity
 
