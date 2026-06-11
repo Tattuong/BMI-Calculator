@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/themes/shop_theme_extension.dart';
 import '../../core/utils/bmi_utils.dart';
 import '../../models/bmi_entry.dart';
 
@@ -13,6 +13,7 @@ class BmiResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     final category = BmiCategory.values.byName(entry.category);
     final color = BmiUtils.categoryColor(category);
 
@@ -23,7 +24,7 @@ class BmiResultCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [color.withValues(alpha: 0.15), AppColors.surface],
+          colors: [color.withValues(alpha: 0.15), c.surface],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: color.withValues(alpha: 0.3)),
@@ -32,7 +33,7 @@ class BmiResultCard extends StatelessWidget {
         children: [
           Text(
             AppStrings.t(context, 'yourBmi'),
-            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w500),
+            style: TextStyle(color: c.onSurfaceVariant, fontSize: 14, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Text(
@@ -60,7 +61,7 @@ class BmiResultCard extends StatelessWidget {
           Text(
             AppStrings.t(context, BmiUtils.categoryAdviceKey(category)),
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14, height: 1.5),
+            style: TextStyle(color: c.onSurfaceVariant, fontSize: 14, height: 1.5),
           ),
           const SizedBox(height: 16),
           Row(
@@ -91,6 +92,7 @@ class BmiHistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     final category = BmiCategory.values.byName(entry.category);
     final color = BmiUtils.categoryColor(category);
     final date = DateFormat.yMMMd(Localizations.localeOf(context).languageCode).add_jm().format(entry.createdAt);
@@ -99,9 +101,9 @@ class BmiHistoryTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.surfaceVariant),
+        border: Border.all(color: c.surfaceVariant),
       ),
       child: Row(
         children: [
@@ -131,15 +133,15 @@ class BmiHistoryTile extends StatelessWidget {
                 Text(
                   '${entry.weight.toStringAsFixed(1)} ${entry.unitSystem == 'metric' ? 'kg' : 'lbs'} · '
                   '${entry.height.toStringAsFixed(1)} ${entry.unitSystem == 'metric' ? 'cm' : 'in'}',
-                  style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13),
+                  style: TextStyle(color: c.onSurfaceVariant, fontSize: 13),
                 ),
-                Text(date, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                Text(date, style: TextStyle(color: c.onSurfaceVariant, fontSize: 12)),
               ],
             ),
           ),
           IconButton(
             onPressed: onDelete,
-            icon: const Icon(Icons.delete_outline, color: AppColors.onSurfaceVariant),
+            icon: Icon(Icons.delete_outline, color: c.onSurfaceVariant),
           ),
         ],
       ),
@@ -155,15 +157,16 @@ class _StatChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
-          Text(label, style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceVariant)),
+          Text(label, style: TextStyle(fontSize: 11, color: c.onSurfaceVariant)),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
         ],
       ),

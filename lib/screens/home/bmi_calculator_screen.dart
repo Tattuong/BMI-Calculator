@@ -3,10 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/themes/shop_theme_extension.dart';
 import '../../core/utils/bmi_utils.dart';
 import '../../models/bmi_entry.dart';
 import '../../providers/bmi_provider.dart';
+import '../../providers/points_provider.dart';
 import '../../widgets/bmi_result_card.dart';
+import '../../widgets/points_badge.dart';
 
 class BmiCalculatorScreen extends StatefulWidget {
   const BmiCalculatorScreen({super.key});
@@ -61,6 +64,11 @@ class _BmiCalculatorScreenState extends State<BmiCalculatorScreen> {
     final entry = await provider.saveCalculation(weight: weight, height: height);
     if (!mounted) return;
 
+    if (entry != null) {
+      final earned = await context.read<PointsProvider>().earnFromCalculation();
+      if (mounted) PointsEarnedSnackBar.show(context, earned);
+    }
+
     setState(() {
       _error = null;
       _lastResult = entry;
@@ -80,6 +88,7 @@ class _BmiCalculatorScreenState extends State<BmiCalculatorScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<BmiProvider>();
     final isMetric = provider.unitSystem == UnitSystem.metric;
+    final c = ShopThemeExtension.of(context);
 
     return SafeArea(
       child: ListView(
@@ -92,7 +101,7 @@ class _BmiCalculatorScreenState extends State<BmiCalculatorScreen> {
           const SizedBox(height: 6),
           Text(
             AppStrings.t(context, 'calculatorSubtitle'),
-            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 15, height: 1.4),
+            style: TextStyle(color: c.onSurfaceVariant, fontSize: 15, height: 1.4),
           ),
           const SizedBox(height: 24),
           _UnitToggle(
@@ -160,10 +169,11 @@ class _UnitToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant.withValues(alpha: 0.6),
+        color: c.surfaceVariant.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -197,13 +207,14 @@ class _ToggleChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? AppColors.surface : Colors.transparent,
+          color: selected ? c.surface : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           boxShadow: selected
               ? [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, 2))]
@@ -214,7 +225,7 @@ class _ToggleChip extends StatelessWidget {
           label,
           style: TextStyle(
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? AppColors.primary : AppColors.onSurfaceVariant,
+            color: selected ? c.primary : c.onSurfaceVariant,
           ),
         ),
       ),
@@ -239,19 +250,20 @@ class _InputCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.surfaceVariant),
+        border: Border.all(color: c.surfaceVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 20, color: AppColors.primary),
+              Icon(icon, size: 20, color: c.primary),
               const SizedBox(width: 8),
               Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
             ],
@@ -263,7 +275,7 @@ class _InputCard extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hint,
               suffixText: suffix,
-              suffixStyle: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.onSurfaceVariant),
+              suffixStyle: TextStyle(fontWeight: FontWeight.w600, color: c.onSurfaceVariant),
             ),
           ),
         ],
@@ -282,10 +294,11 @@ class _CategoryGuide extends StatelessWidget {
       ('categoryObese', '≥ 30', BmiCategory.obese),
     ];
 
+    final c = ShopThemeExtension.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant.withValues(alpha: 0.4),
+        color: c.surfaceVariant.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -308,7 +321,7 @@ class _CategoryGuide extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Expanded(child: Text(AppStrings.t(context, item.$1))),
-                  Text(item.$2, style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13)),
+                  Text(item.$2, style: TextStyle(color: c.onSurfaceVariant, fontSize: 13)),
                 ],
               ),
             ),

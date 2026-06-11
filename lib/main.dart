@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'core/services/storage_service.dart';
 import 'core/themes/app_theme.dart';
 import 'providers/bmi_provider.dart';
+import 'providers/iap_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/points_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/splash_screen.dart';
 
@@ -34,14 +36,16 @@ class BmiCalculatorApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => BmiProvider()),
+        ChangeNotifierProvider(create: (_) => PointsProvider()),
+        ChangeNotifierProvider(create: (_) => IapProvider()),
       ],
-      child: Consumer2<ThemeProvider, LocaleProvider>(
-        builder: (context, themeProvider, localeProvider, _) {
+      child: Consumer3<ThemeProvider, LocaleProvider, PointsProvider>(
+        builder: (context, themeProvider, localeProvider, pointsProvider, _) {
           return MaterialApp(
             title: 'BMI Calculator',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+            theme: AppTheme.lightThemeFor(pointsProvider.activeTheme),
+            darkTheme: AppTheme.darkThemeFor(pointsProvider.activeTheme),
             themeMode: themeProvider.themeMode,
             locale: localeProvider.locale,
             localizationsDelegates: const [

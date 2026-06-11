@@ -2,18 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
+import 'shop_theme_extension.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
+  static ThemeData lightThemeFor(String? themeId) {
+    final palette = ShopThemeExtension.forThemeId(themeId);
+    return _buildLight(palette);
+  }
+
+  static ThemeData darkThemeFor(String? themeId) {
+    final palette = ShopThemeExtension.forThemeId(themeId);
+    return _buildDark(palette);
+  }
+
+  static ThemeData get lightTheme => _buildLight(ShopThemeExtension.defaultTheme);
+
+  static ThemeData get darkTheme => _buildDark(ShopThemeExtension.defaultTheme);
+
+  static ThemeData _buildLight(ShopThemeExtension palette) {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: AppColors.background,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
-        surface: AppColors.surface,
+      scaffoldBackgroundColor: palette.background,
+      extensions: [palette],
+      colorScheme: ColorScheme.light(
+        primary: palette.primary,
+        secondary: palette.secondary,
+        surface: palette.surface,
         onPrimary: AppColors.onPrimary,
-        onSurface: AppColors.onSurface,
+        onSurface: palette.onSurface,
       ),
       textTheme: GoogleFonts.nunitoTextTheme(),
       appBarTheme: AppBarTheme(
@@ -23,13 +39,13 @@ class AppTheme {
         titleTextStyle: GoogleFonts.nunito(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: AppColors.onSurface,
+          color: palette.onSurface,
         ),
-        iconTheme: const IconThemeData(color: AppColors.onSurface),
+        iconTheme: IconThemeData(color: palette.onSurface),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceVariant.withValues(alpha: 0.5),
+        fillColor: palette.surfaceVariant.withValues(alpha: 0.5),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -38,30 +54,34 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: palette.primary,
           foregroundColor: AppColors.onPrimary,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: palette.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData _buildDark(ShopThemeExtension palette) {
+    final darkBg = Color.lerp(palette.onSurface, Colors.black, 0.85)!;
+    final darkSurface = Color.lerp(palette.onSurface, Colors.black, 0.7)!;
+
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color(0xFF0F1F1D),
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.primaryLight,
-        secondary: AppColors.secondary,
-        surface: Color(0xFF1A2E2B),
-        onSurface: Color(0xFFECFDF5),
+      scaffoldBackgroundColor: darkBg,
+      extensions: [palette],
+      colorScheme: ColorScheme.dark(
+        primary: palette.primaryLight,
+        secondary: palette.secondary,
+        surface: darkSurface,
+        onSurface: palette.surfaceVariant,
       ),
       textTheme: GoogleFonts.nunitoTextTheme(ThemeData.dark().textTheme),
       appBarTheme: AppBarTheme(
@@ -70,12 +90,12 @@ class AppTheme {
         titleTextStyle: GoogleFonts.nunito(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFFECFDF5),
+          color: palette.surfaceVariant,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF234440).withValues(alpha: 0.5),
+        fillColor: darkSurface.withValues(alpha: 0.5),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -83,13 +103,13 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: palette.primary,
           foregroundColor: AppColors.onPrimary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
       cardTheme: CardThemeData(
-        color: const Color(0xFF1A2E2B),
+        color: darkSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),

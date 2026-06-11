@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../core/constants/app_colors.dart';
 import '../core/constants/app_strings.dart';
+import '../core/themes/shop_theme_extension.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -15,6 +15,7 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     final items = [
       _NavItem(Icons.calculate_outlined, Icons.calculate, 'calculator'),
       _NavItem(Icons.history_outlined, Icons.history, 'history'),
@@ -23,7 +24,7 @@ class AppBottomNav extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, -2))],
       ),
       child: SafeArea(
@@ -44,7 +45,7 @@ class AppBottomNav extends StatelessWidget {
                       children: [
                         Icon(
                           active ? item.activeIcon : item.icon,
-                          color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+                          color: active ? c.primary : c.onSurfaceVariant,
                           size: 24,
                         ),
                         const SizedBox(height: 2),
@@ -53,7 +54,7 @@ class AppBottomNav extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                            color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+                            color: active ? c.primary : c.onSurfaceVariant,
                           ),
                         ),
                       ],

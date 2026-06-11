@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_strings.dart';
+import '../core/constants/iap_constants.dart';
 import '../core/services/storage_service.dart';
+import '../providers/iap_provider.dart';
+import '../providers/points_provider.dart';
 import '../widgets/app_logo.dart';
 import 'main_shell.dart';
 import 'onboarding_screen.dart';
@@ -37,7 +41,23 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     );
 
     _entryController.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initIap());
     _navigate();
+  }
+
+  Future<void> _initIap() async {
+    if (!mounted) return;
+    final iap = context.read<IapProvider>();
+    final points = context.read<PointsProvider>();
+    iap.onPurchaseSuccess = (productId) async {
+      final coins = IapConstants.coinAmounts[productId];
+      if (coins != null) {
+        await points.addPoints(coins);
+      } else if (productId == IapConstants.removeAds) {
+        await points.unlockItem(IapConstants.itemRemoveAds);
+      }
+    };
+    await iap.initialize();
   }
 
   Future<void> _navigate() async {

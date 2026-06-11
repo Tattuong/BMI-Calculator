@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/themes/shop_theme_extension.dart';
 import '../../providers/locale_provider.dart';
+import '../../providers/points_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/app_divider.dart';
 import '../privacy_policy_screen.dart';
+import '../shop/shop_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -34,6 +36,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
     final localeProvider = context.watch<LocaleProvider>();
+    final points = context.watch<PointsProvider>();
+    final c = ShopThemeExtension.of(context);
 
     return SafeArea(
       child: ListView(
@@ -41,6 +45,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(AppStrings.t(context, 'settings'), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
           const SizedBox(height: 24),
+          _Section(
+            title: AppStrings.t(context, 'shop'),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.storefront_outlined, color: Colors.amber),
+              ),
+              title: Text(AppStrings.t(context, 'shop')),
+              subtitle: Text(
+                AppStrings.t(context, 'yourPointsValue', params: {'amount': '${points.points}'}),
+                style: const TextStyle(fontSize: 13),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ShopScreen()),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           _Section(
             title: AppStrings.t(context, 'theme'),
             child: SegmentedButton<ThemeMode>(
@@ -72,10 +102,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
+                  color: c.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.privacy_tip_outlined, color: AppColors.primary),
+                child: Icon(Icons.privacy_tip_outlined, color: c.primary),
               ),
               title: Text(AppStrings.t(context, 'privacyPolicy')),
               trailing: const Icon(Icons.chevron_right),
@@ -87,19 +117,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: AppStrings.t(context, 'about'),
             child: Text(
               AppStrings.t(context, 'aboutDesc'),
-              style: const TextStyle(color: AppColors.onSurfaceVariant, height: 1.5),
+              style: TextStyle(color: c.onSurfaceVariant, height: 1.5),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             '${AppStrings.t(context, 'version')}: $_version',
-            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 13),
+            style: TextStyle(color: c.onSurfaceVariant, fontSize: 13),
           ),
           const SizedBox(height: 24),
           Center(
             child: Text(
               AppStrings.t(context, 'copyright'),
-              style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 12),
+              style: TextStyle(color: c.onSurfaceVariant, fontSize: 12),
             ),
           ),
         ],
@@ -116,12 +146,13 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = ShopThemeExtension.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.surfaceVariant),
+        border: Border.all(color: c.surfaceVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

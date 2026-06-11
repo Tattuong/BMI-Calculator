@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/themes/shop_theme_extension.dart';
 import '../../providers/bmi_provider.dart';
 import '../../widgets/bmi_result_card.dart';
 
@@ -30,6 +30,7 @@ class BmiHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final history = context.watch<BmiProvider>().history;
+    final c = ShopThemeExtension.of(context);
 
     return SafeArea(
       child: Column(
@@ -47,7 +48,7 @@ class BmiHistoryScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         AppStrings.t(context, 'historySubtitle'),
-                        style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
+                        style: TextStyle(color: c.onSurfaceVariant, fontSize: 14),
                       ),
                     ],
                   ),
@@ -68,7 +69,7 @@ class BmiHistoryScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.history, size: 64, color: AppColors.primary.withValues(alpha: 0.35)),
+                          Icon(Icons.history, size: 64, color: c.primary.withValues(alpha: 0.35)),
                           const SizedBox(height: 16),
                           Text(
                             AppStrings.t(context, 'emptyHistory'),
@@ -79,7 +80,7 @@ class BmiHistoryScreen extends StatelessWidget {
                           Text(
                             AppStrings.t(context, 'emptyHistorySub'),
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14),
+                            style: TextStyle(color: c.onSurfaceVariant, fontSize: 14),
                           ),
                         ],
                       ),

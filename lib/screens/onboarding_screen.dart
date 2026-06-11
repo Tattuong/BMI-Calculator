@@ -34,68 +34,80 @@ class OnboardingScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.splashGradient),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                const Spacer(),
-                const AppLogo(size: 110),
-                const SizedBox(height: 32),
-                Text(
-                  AppStrings.t(context, 'onboardingTitle'),
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  AppStrings.t(context, 'onboardingSubtitle'),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 16, height: 1.5),
-                ),
-                const SizedBox(height: 36),
-                ...features.map(
-                  (f) => Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.surfaceVariant),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      const AppLogo(size: 100),
+                      const SizedBox(height: 28),
+                      Text(
+                        AppStrings.t(context, 'onboardingTitle'),
+                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        AppStrings.t(context, 'onboardingSubtitle'),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: AppColors.onSurfaceVariant, fontSize: 16, height: 1.5),
+                      ),
+                      const SizedBox(height: 28),
+                      ...features.map(
+                        (f) => Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.surface.withValues(alpha: 0.85),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.surfaceVariant),
                           ),
-                          child: Icon(f.$1, color: AppColors.primary),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(f.$1, color: AppColors.primary),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Text(f.$2, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(f.$2, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: () => _finish(context),
+                        style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                        child: Text(AppStrings.t(context, 'start')),
+                      ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: () => _finish(context),
+                      child: Text(AppStrings.t(context, 'skip'), style: const TextStyle(color: AppColors.onSurfaceVariant)),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () => _finish(context),
-                    style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                    child: Text(AppStrings.t(context, 'start')),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => _finish(context),
-                  child: Text(AppStrings.t(context, 'skip'), style: const TextStyle(color: AppColors.onSurfaceVariant)),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
